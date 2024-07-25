@@ -27,6 +27,16 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <title>
         <?= $defaultTitle ?><?= $pageTitle ? ' - ' . $pageTitle : '' ?>
     </title>
+    <!-- jQuery CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <?= $this->Html->meta('icon') ?>
 
     <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake']) ?>
@@ -35,11 +45,17 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
+
+    <style>
+        body {
+            font-family: 'Kiwi Maru', sans-serif;
+        }
+    </style>
 </head>
-<body>
-    <nav class="top-nav">
+<body class="bg-white flex-grow p-5">
+    <nav class="top-nav flex justify-center bg-lime-50 shadow-xl">
         <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>"><span>ストレス</span>診断システム</a>
+            <a href="<?= $this->Url->build('/index') ?>"><span>ストレス</span>診断システム</a>
         </div>
         <!-- <div class="top-nav-links">
             <a target="_blank" rel="noopener" href="https://book.cakephp.org/4/">Documentation</a>

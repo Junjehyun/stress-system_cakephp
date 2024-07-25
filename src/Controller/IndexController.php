@@ -12,9 +12,18 @@ class IndexController extends AppController
 {
     /**
      * 産業医メニュー画面
+     * 
      */
     public function main() {
         
+    }
+
+    /**
+     * ブランクページ
+     * 
+     */
+    public function blank() {
+            
     }
     /**
      * Index method

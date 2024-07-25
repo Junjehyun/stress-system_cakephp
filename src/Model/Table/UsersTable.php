@@ -41,6 +41,19 @@ class UsersTable extends Table
         $this->setDisplayField('NAME');
         $this->setPrimaryKey('id');
 
+        // 他のテーブルとの関連付け
+        $this->belongsTo('KaisyaMst', [
+            'foreignKey' => 'KAISYA_CODE',
+            'bindingKey' => 'KAISYA_CODE',
+            'joinType' => 'LEFT'
+        ]);
+
+        $this->belongsTo('TaisyoSoshiki', [
+            'foreignKey' => 'SOSHIKI_CODE',
+            'bindingKey' => 'SOSHIKI_CODE',
+            'joinType' => 'LEFT'
+        ]);
+
         // timestamp behaviorを追加すると、created_atとupdated_atフィールドが自動的に管理される
         $this->addBehavior('Timestamp', [
             'created' => 'created_at',

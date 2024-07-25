@@ -41,6 +41,13 @@ class TaisyoSoshikiTable extends Table
         $this->setDisplayField('SOSHIKI_CODE');
         $this->setPrimaryKey('KYOIKU_CODE');
 
+        // 他のテーブルとの関連付け
+        $this->hasMany('Users', [
+            'foreignKey' => 'SOSHIKI_CODE',
+            'bindingKey' => 'SOSHIKI_CODE',
+            'joinType' => 'LEFT'
+        ]);
+
          // Timestampにより、created_at、updated_atの自動管理
         $this->addBehavior('Timestamp', [
             'events' => [

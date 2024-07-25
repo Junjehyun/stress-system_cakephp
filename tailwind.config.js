@@ -6,7 +6,11 @@ module.exports = {
     './webroot/js/**/*.js',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        jp: ['Kiwi Maru', 'Noto Sans Japanese', 'sans-serif'], // 日本語フォント
+      },
+    },
   },
   plugins: [],
 }

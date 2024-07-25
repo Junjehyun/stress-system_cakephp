@@ -41,6 +41,13 @@ class KaisyaMstTable extends Table
         $this->setDisplayField('KAISYA_NAME_JPN');
         $this->setPrimaryKey('KAISYA_CODE');
 
+        // 他のテーブルとの関連付け
+        $this->hasMany('Users', [
+            'foreignKey' => 'KAISYA_CODE',
+            'bindingKey' => 'KAISYA_CODE',
+            'joinType' => 'LEFT'
+        ]);
+
          // Timestampにより、created_at、updated_atの自動管理
         $this->addBehavior('Timestamp', [
             'events' => [

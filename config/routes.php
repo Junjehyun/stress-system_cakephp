@@ -51,17 +51,32 @@ return function (RouteBuilder $routes): void {
 
     $routes->scope('/', function (RouteBuilder $builder): void {
         /**
-         * Start myroute
-         * 
-         * /index -> 
-         * /doctor-list->
-         * /hyoji-search(ajax search)->
-         * /doctor-create->
-         * /doctor-edit->
-         * /doctor-delete->
+         * IndexController
          * 
          */
-        $builder->connect('/index', ['controller' => 'Index', 'action' => 'main'])->setMethods(['GET']);    
+        $builder->connect('/index', ['controller' => 'Index', 'action' => 'main'])->setMethods(['GET']); 
+        $builder->connect('/blank', ['controller' => 'Index', 'action' => 'blank'])->setMethods(['GET']);
+
+        /**
+         * DoctorListController
+         */
+        $builder->connect('/doctor-list', ['controller' => 'DoctorList', 'action' => 'doctorListIndex'])->setMethods(['GET']);
+        $builder->connect('/doctor-list/search-company', ['controller' => 'DoctorList', 'action' => 'searchCompany'])->setMethods(['POST']);
+        $builder->connect('/doctor-list/search-soshiki', ['controller' => 'DoctorList', 'action' => 'searchSoshiki'])->setMethods(['POST']);
+        // 表示するボタンを押したときの処理
+        $builder->connect('/doctor-list/hyoji-search', ['controller' => 'DoctorList', 'action' => 'hyojiSearch'])->setMethods(['POST']);
+
+
+
+
+
+
+
+
+
+
+
+
 
         
         /*
