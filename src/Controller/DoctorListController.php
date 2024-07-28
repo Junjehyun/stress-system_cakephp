@@ -15,6 +15,7 @@ use Cake\Log\Log;
 class DoctorListController extends AppController
 {
     public function initialize(): void {
+
         parent::initialize();
         /**
          * 各テーブルをインスタンス化 Users, KaisyaMst, TaisyoSoshiki
@@ -23,6 +24,7 @@ class DoctorListController extends AppController
         $this->Users = TableRegistry::getTableLocator()->get('Users');
         $this->KaisyaMst = TableRegistry::getTableLocator()->get('KaisyaMst');
         $this->TaisyoSoshiki = TableRegistry::getTableLocator()->get('TaisyoSoshiki');
+        
     }
     /**
      * 産業医一覧画面

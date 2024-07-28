@@ -73,7 +73,7 @@ class UsersTable extends Table
             ->scalar('NAME')
             ->maxLength('NAME', 10)
             ->requirePresence('NAME', 'create')
-            ->notEmptyString('NAME');
+            ->notEmptyString('NAME', '氏名は必須です。');
 
         $validator
             ->scalar('EMAIL')

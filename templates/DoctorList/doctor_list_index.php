@@ -1,5 +1,5 @@
 <?php $this->assign('title', '産業医一覧'); ?>
-<div class="container max-w-7xl mx-auto py-8">
+<div class="container max-w-8xl mx-auto py-8">
     <div class="bg-zinc-50 p-3 rounded shadow-xl gap-3">
         <?= $this->Form->create(null, ['url' => ['controller' => 'DoctorList', 'action' => 'hyojiSearch']]) ?>
             <div class="flex flex-wrap justify-between items-center gap-3">
@@ -10,7 +10,7 @@
                             <input type="checkbox" id="companyCheck" name="companyCheck" class="form-checkbox h-5 w-5 transition duration-150 ease-in-out" <?= !empty($this->request->getData('companyCheck')) ? 'checked' : '' ?>>
                             <label class="text-gray-500 font-bold text-2xl px-2">会社名</label>
                         </div>
-                        <input id="companyNameInput" name="companyNameInput" type="text" class="form-control mx-2 placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-lime-500 focus:border-transparent w-1/3 flex-grow" placeholder="会社名を入力" value="<?= h($this->request->getData('companyNameInput')) ?>">
+                        <input id="companyNameInput" name="companyNameInput" type="text" class="form-control mx-2 placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-lime-500 focus:border-transparent w-1/3" placeholder="会社名を入力" value="<?= h($this->request->getData('companyNameInput')) ?>">
                         <button type="button" id="ajaxSearchBtn" class="bg-lime-200 hover:bg-lime-400 text-green-800 font-bold mx-2 py-2 px-4 rounded focus:outline-none border-none">
                             検索
                         </button>
@@ -61,7 +61,7 @@
                 <button type="submit" class="bg-lime-200 hover:bg-lime-400 text-green-800 font-bold py-2 px-4 rounded mr-5 border-none">
                     表示する
                 </button>
-                <button type="button" class="bg-teal-200 hover:bg-teal-400 text-green-800 font-bold py-2 px-4 rounded border-none">
+                <button type="button" class="bg-teal-200 hover:bg-teal-400 text-green-800 font-bold py-2 px-4 rounded border-none" onclick="goToCreate()">
                     追加する
                 </button>
             </div>
@@ -169,4 +169,8 @@
             });
         });
     });
+    // Go to Create
+    function goToCreate() {
+        window.location.href = '/doctor-create';
+    }
 </script>

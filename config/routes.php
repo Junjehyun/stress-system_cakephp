@@ -59,6 +59,8 @@ return function (RouteBuilder $routes): void {
 
         /**
          * DoctorListController
+         * 
+         * 
          */
         $builder->connect('/doctor-list', ['controller' => 'DoctorList', 'action' => 'doctorListIndex'])->setMethods(['GET']);
         $builder->connect('/doctor-list/search-company', ['controller' => 'DoctorList', 'action' => 'searchCompany'])->setMethods(['POST']);
@@ -67,7 +69,23 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/doctor-list/hyoji-search', ['controller' => 'DoctorList', 'action' => 'hyojiSearch'])->setMethods(['POST']);
 
 
+        /**
+         * DoctorCreateController
+         * 
+         */
+        $builder->connect('/doctor-create', 
+        [
+            'controller' => 'DoctorCreate', 
+            'action' => 'doctorCreateIndex'
+        ]
+        )->setMethods(['GET']);
 
+        $builder->connect('/doctor-create', 
+        [
+            'controller' => 'DoctorCreate', 
+            'action' => 'createDoctor'
+        ]
+        )->setMethods(['POST']);
 
 
 
