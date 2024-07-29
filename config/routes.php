@@ -54,19 +54,61 @@ return function (RouteBuilder $routes): void {
          * IndexController
          * 
          */
-        $builder->connect('/index', ['controller' => 'Index', 'action' => 'main'])->setMethods(['GET']); 
-        $builder->connect('/blank', ['controller' => 'Index', 'action' => 'blank'])->setMethods(['GET']);
+        $builder->connect('/index', 
+        [
+            'controller' => 'Index',
+            'action' => 'main'
+        ]
+        )->setMethods(['GET']); 
+
+        $builder->connect('/blank', 
+        [
+            'controller' => 'Index', 
+            'action' => 'blank'
+        ]
+        )->setMethods(['GET']);
 
         /**
          * DoctorListController
          * 
          * 
          */
-        $builder->connect('/doctor-list', ['controller' => 'DoctorList', 'action' => 'doctorListIndex'])->setMethods(['GET']);
-        $builder->connect('/doctor-list/search-company', ['controller' => 'DoctorList', 'action' => 'searchCompany'])->setMethods(['POST']);
-        $builder->connect('/doctor-list/search-soshiki', ['controller' => 'DoctorList', 'action' => 'searchSoshiki'])->setMethods(['POST']);
+        $builder->connect('/doctor-list', 
+        [
+            'controller' => 'DoctorList', 
+            'action' => 'doctorListIndex'
+        ]
+        )->setMethods(['GET']);
+
+        $builder->connect('/doctor-list/search-company', 
+        [
+            'controller' => 'DoctorList', 
+            'action' => 'searchCompany'
+        ]
+        )->setMethods(['POST']);
+
+        $builder->connect('/doctor-list/search-soshiki', 
+        [
+            'controller' => 'DoctorList', 
+            'action' => 'searchSoshiki'
+        ]
+        )->setMethods(['POST']);
+
         // 表示するボタンを押したときの処理
-        $builder->connect('/doctor-list/hyoji-search', ['controller' => 'DoctorList', 'action' => 'hyojiSearch'])->setMethods(['POST']);
+        $builder->connect('/doctor-list/hyoji-search',
+        [
+            'controller' => 'DoctorList', 
+            'action' => 'hyojiSearch'
+        ]
+        )->setMethods(['POST']);
+
+        // 削除ボタンを押したときの処理
+        $builder->connect('/doctor-list/delete-doctor',
+        [
+            'controller' => 'DoctorList', 
+            'action' => 'deleteDoctor'
+        ]
+        )->setMethods(['POST']);
 
 
         /**
@@ -87,15 +129,18 @@ return function (RouteBuilder $routes): void {
         ]
         )->setMethods(['POST']);
 
-
-
-
-
-
-
-
-
-
+        /**
+         * DoctorEditController
+         * 
+         */
+        $builder->connect('/doctor-edit:USER_ID',
+        [
+            'controller' => 'DoctorEdit',
+            'action' => 'doctorEdit'
+        ]
+        )->setPass(['USER_ID'])
+        ->setMethods(['GET', 'POST'])
+        ;
         
         /*
          * Here, we are connecting '/' (base path) to a controller called 'Pages',

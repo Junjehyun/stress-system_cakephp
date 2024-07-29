@@ -1,5 +1,5 @@
 <?php $this->assign('title', '産業医一覧'); ?>
-<div class="container max-w-8xl mx-auto py-8">
+<div class="container max-w-7xl mx-auto py-8">
     <div class="bg-zinc-50 p-3 rounded shadow-xl gap-3">
         <?= $this->Form->create(null, ['url' => ['controller' => 'DoctorList', 'action' => 'hyojiSearch']]) ?>
             <div class="flex flex-wrap justify-between items-center gap-3">
@@ -81,7 +81,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($query as $index => $user): ?>
+                <?php foreach ($users as $index => $user): ?>
                 <tr>
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center"><?= $index + 1 ?></td>
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center"><?= h($user->USER_ID) ?></td>
@@ -90,10 +90,12 @@
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center"><?= h($user->taisyo_soshiki->SOSHIKI_NAME_JPN) ?></td>
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center"><?= h($user->KENGEN_KUBUN == 1? '全社' : '自社') ?></td>
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center">
+                    <a href="<?= $this->Url->build(['controller' => 'DoctorEdit', 'action' => 'doctorEdit', $user->USER_ID]) ?>">
                         <button type="button" class="bg-cyan-300 hover:bg-cyan-400 py-2 px-4 rounded border-none">
                             変更
                         </button>
-                        <button type="button" class="bg-pink-300 hover:bg-pink-400 py-2 px-4 rounded border-none">
+                    </a>
+                        <button type="button" class="bg-pink-300 hover:bg-pink-400 py-2 px-4 rounded border-none" data-user-id="<?= h($user->USER_ID) ?>" onclick="deleteUser(this)">
                             削除
                         </button>
                     </td>
@@ -101,6 +103,16 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <div class="paginator mt-10">
+            <ul class="pagination">
+                <?= $this->Paginator->first('<< ' . __('最初')) ?>
+                <?= $this->Paginator->prev('< ' . __('前')) ?>
+                <?= $this->Paginator->numbers() ?>
+                <?= $this->Paginator->next(__('次') . ' >') ?>
+                <?= $this->Paginator->last(__('最後') . ' >>') ?>
+            </ul>
+            <!-- <p><?= $this->Paginator->counter(__('ページ {page} / {pages}, 全 {count} 件')) ?></p> -->
+        </div>
     </div>
 </div>
 <script>
@@ -172,5 +184,37 @@
     // Go to Create
     function goToCreate() {
         window.location.href = '/doctor-create';
+    }
+    //削除処理
+    function deleteUser(button) {
+        var userId = $(button).data('user-id');
+        var csrfToken = <?= json_encode($this->request->getAttribute('csrfToken')); ?>;
+
+        if(confirm('本当に削除しますか?')) {
+            $.ajax({
+                url: '/doctor-list/delete-doctor',
+                type: 'POST',
+                data: {
+                    USER_ID: userId,
+                    _csrfToken: csrfToken
+                },
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        alert('ユーザーを削除しました');
+                        location.reload();
+                    } else {
+                        alert('削除できませんでした: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('エラー: ' + error);
+                    alert('削除に失敗しました。');
+                }
+            });
+        }
     }
 </script>

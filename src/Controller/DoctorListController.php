@@ -17,6 +17,7 @@ class DoctorListController extends AppController
     public function initialize(): void {
 
         parent::initialize();
+        $this->loadComponent('Paginator');
         /**
          * 各テーブルをインスタンス化 Users, KaisyaMst, TaisyoSoshiki
          * 
@@ -45,11 +46,15 @@ class DoctorListController extends AppController
                 'KaisyaMst.KAISYA_NAME_JPN',
                 'TaisyoSoshiki.SOSHIKI_NAME_JPN',
                 'Users.KENGEN_KUBUN'
-            ])
-            ->toArray();
+            ]);
+
+        $users = $this->Paginator->paginate($query, [
+            'limit' => 10,
+            'order' => ['Users.USER_ID' => 'desc']
+        ]);
 
         // ビューにデータを渡す
-        $this->set(compact('query'));
+        $this->set(compact('users'));
     }
 
     /**
@@ -140,6 +145,8 @@ class DoctorListController extends AppController
                     ->select(['KAISYA_NAME_JPN'])
                     ->where(['KAISYA_CODE' => $companyName])
                     ->first();
+            } else {
+                $searchResultCompany = null;
             }
             // 組織名が選択されている場合
             if (!empty($soshikiName)) {
@@ -150,6 +157,8 @@ class DoctorListController extends AppController
                     ->select(['SOSHIKI_NAME_JPN'])
                     ->where(['SOSHIKI_CODE' => $soshikiName])
                     ->first();
+            } else {
+                $searchResultSoshiki = null;
             }
             // 権限区分が選択されている場合
             if (!empty($kengenKubun)) {
@@ -159,11 +168,51 @@ class DoctorListController extends AppController
             $query = $this->Users->find()
                 ->contain(['KaisyaMst', 'TaisyoSoshiki'])
                 ->where($conditions);
+            
+            // ページネーションを使用してクエリ結果を分割
+            $users = $this->Paginator->paginate($query, [
+                'limit' => 10,
+                'order' => ['Users.USER_ID' => 'desc']
+            ]);
 
             // ビューにデータを渡す
-            $this->set(compact('query', 'companyName','searchResultCompany', 'soshikiName', 'searchResultSoshiki', 'kengenKubun'));
+            $this->set(compact('users', 'companyName','searchResultCompany', 'soshikiName', 'searchResultSoshiki', 'kengenKubun'));
             $this->render('doctor_list_index');
         }
+    }
+
+    /**
+     * 削除処理
+     * 
+     */
+    public function deleteDoctor() {
+
+        $this->request->allowMethod('post');
+
+        $userId = $this->request->getData('USER_ID');
+        if(!$userId) {
+            return $this->response
+                    ->withType('application/json')
+                    ->withStringBody(json_encode(['success' => false, 'message' => '有効なユーザーIDがありません']));
+        }
+
+        $usersTable = TableRegistry::getTableLocator()->get('Users');
+        //$user = $usersTable->get($userId);
+        $user = $usersTable
+                ->find()
+                ->where(['USER_ID' => $userId])
+                ->first();
+
+        if($usersTable->delete($user)) {
+            return $this->response
+                    ->withType('application/json')
+                    ->withStringBody(json_encode(['success' => true, 'message' => '削除しました']));
+        } else {
+            return $this->response
+                    ->withType('application/json')
+                    ->withStringBody(json_encode(['success' => false, 'message' => '削除できませんでした']));
+        }
+
     }
 
 
