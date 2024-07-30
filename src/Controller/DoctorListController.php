@@ -33,11 +33,34 @@ class DoctorListController extends AppController
      * @return void
      */
     public function doctorListIndex() {
-        /**
-         * Table Join
-         * 
-         * @var mixed
-         */
+
+        //フォームデータ取得（Hidden直）
+        $companyCheck = $this->request->getQuery('companyCheck','');
+        $soshikiCheck = $this->request->getQuery('soshikiCheck','');
+        $kengenCheck = $this->request->getQuery('kengenCheck','');
+
+        $companyNameInput = $this->request->getQuery('companyNameInput');
+        $soshikiNameInput = $this->request->getQuery('soshikiNameInput');
+
+        // $companyNameOutput, $soshikiNameOutput
+        $companyNameOutput = $this->request->getQuery('companyNameOutput');
+        $soshikiNameOutput = $this->request->getQuery('soshikiNameOutput');
+
+        $kengenKubun = $this->request->getQuery('kengenKubun', '');
+
+
+        // ビューにデータを渡す
+        $this->set(compact('companyCheck', 
+        'soshikiCheck', 
+        'kengenCheck', 
+        'companyNameInput', 
+        'soshikiNameInput',
+        'companyNameOutput',
+        'soshikiNameOutput',
+        'kengenKubun'
+        ));
+
+        //LEFT JOIN
         $query = $this->Users->find()
             ->contain(['KaisyaMst', 'TaisyoSoshiki'])
             ->select([
@@ -54,7 +77,7 @@ class DoctorListController extends AppController
         ]);
 
         // ビューにデータを渡す
-        $this->set(compact('users'));
+        $this->set(compact('users', 'companyCheck', 'soshikiCheck'));
     }
 
     /**
@@ -94,6 +117,7 @@ class DoctorListController extends AppController
      * @return void
      */
     public function searchSoshiki() {
+        
         $this->request->allowMethod(['post']);
 
         $soshikiName = $this->request->getData('soshikiName');
@@ -127,11 +151,13 @@ class DoctorListController extends AppController
 
         // postリクエストか確認(isメソッド)
         if($this->request->is('post')) {
-
             // フォームから選択された会社名、組織名、権限区分を取得
             $companyName = $this->request->getData('companyNameOutput');
             $soshikiName = $this->request->getData('soshikiNameOutput');
             $kengenKubun = $this->request->getData('kengenKubun');
+
+            $companyNameInput = $this->request->getData('companyNameInput');
+            $soshikiNameInput = $this->request->getData('soshikiNameInput');
 
             //クエリ条件配列初期化
             $conditions = [];
@@ -176,7 +202,15 @@ class DoctorListController extends AppController
             ]);
 
             // ビューにデータを渡す
-            $this->set(compact('users', 'companyName','searchResultCompany', 'soshikiName', 'searchResultSoshiki', 'kengenKubun'));
+            $this->set(compact('users', 
+                'companyName',
+                'searchResultCompany', 
+                'soshikiName', 
+                'searchResultSoshiki', 
+                'kengenKubun',
+                'companyNameInput',
+                'soshikiNameInput'
+            ));
             $this->render('doctor_list_index');
         }
     }

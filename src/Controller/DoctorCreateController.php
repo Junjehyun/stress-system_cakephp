@@ -31,6 +31,18 @@ class DoctorCreateController extends AppController
      */
     public function doctorCreateIndex() {
 
+        // URL 파라미터로부터 값 받아오기
+        $companyCheck = $this->request->getQuery('companyCheck', 'false');
+        $soshikiCheck = $this->request->getQuery('soshikiCheck', 'false');
+        $kengenCheck = $this->request->getQuery('kengenCheck', 'false');
+
+        $companyNameInput = $this->request->getQuery('companyNameInput');
+        $soshikiNameInput = $this->request->getQuery('soshikiNameInput');
+
+        $companyNameOutput = $this->request->getQuery('companyNameOutput');
+
+        $kengenKubun = $this->request->getQuery('kengenKubun');
+
         $companyName = $this->KaisyaMst->find('list', [
             'keyField' => 'KAISYA_CODE',
             'valueField' => 'KAISYA_NAME_JPN'
@@ -41,7 +53,11 @@ class DoctorCreateController extends AppController
             'valueField' => 'SOSHIKI_NAME_JPN'
             ])->toArray();
 
-        $this->set(compact('companyName', 'soshikiName'));
+        $this->set(compact(
+            'companyName', 'soshikiName', 
+            'companyCheck', 'soshikiCheck', 'kengenCheck',
+            'companyNameInput', 'soshikiNameInput', 'kengenKubun'
+        ));
 
     }
 
@@ -64,7 +80,6 @@ class DoctorCreateController extends AppController
         }
         return $this->redirect(['action' => 'doctorCreateIndex']);
     }
-
 
     /**
      * Index method

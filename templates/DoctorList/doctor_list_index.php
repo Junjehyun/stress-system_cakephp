@@ -7,11 +7,11 @@
                     <!--会社名-->
                     <div class="flex items-center justify-start mb-3 space-x-4">
                         <div class="flex items-center space-x-2">
-                            <input type="checkbox" id="companyCheck" name="companyCheck" class="form-checkbox h-6 w-6 transition duration-150 ease-in-out" <?= !empty($this->request->getData('companyCheck')) ? 'checked' : '' ?> onchange="changeActiveCheckBox()">
+                            <input type="checkbox" id="companyCheck" name="companyCheck" class="form-checkbox h-6 w-6 transition duration-150 ease-in-out" <?= (!empty($companyCheck) && $companyCheck === 'true') || !empty($this->request->getData('companyCheck')) ? 'checked' : '' ?> onchange="changeActiveCheckBox()">
                             <label class="text-gray-500 font-bold text-2xl px-2 mb-0">会社名</label>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <input id="companyNameInput" name="companyNameInput" type="text" class="form-control placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-lime-500 focus:border-transparent disabled:bg-gray-200 disabled:cursor-not-allowed" style="width: 200px;" placeholder="会社名を入力" value="<?= h($this->request->getData('companyNameInput')) ?>">
+                            <input id="companyNameInput" name="companyNameInput" type="text" class="form-control placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-lime-500 focus:border-transparent disabled:bg-gray-200 disabled:cursor-not-allowed" style="width: 200px;" placeholder="会社名を入力" value="<?= h($companyNameInput ?: $this->request->getData('companyNameInput')) ?>">
                             <button type="button" id="ajaxSearchBtn" class="bg-lime-200 hover:bg-lime-400 text-green-800 font-bold py-2 px-4 rounded focus:outline-none border-none disabled:bg-gray-200 disabled:hover:bg-gray-300" disabled>
                                 検索
                             </button>
@@ -26,11 +26,11 @@
                     <!--組織名-->
                     <div class="flex items-center justify-start mb-3 space-x-4">
                         <div class="flex items-center space-x-2">
-                            <input type="checkbox" id="soshikiCheck" name="soshikiCheck" class="form-checkbox h-6 w-6 transition duration-150 ease-in-out" <?= !empty($this->request->getData('soshikiCheck')) ? 'checked' : '' ?> onchange="changeActiveCheckBox()">
+                            <input type="checkbox" id="soshikiCheck" name="soshikiCheck" class="form-checkbox h-6 w-6 transition duration-150 ease-in-out" <?= (!empty($soshikiCheck) && $soshikiCheck === 'true') || !empty($this->request->getData('soshikiCheck')) ? 'checked' : '' ?> onchange="changeActiveCheckBox()">
                             <label class="text-gray-500 font-bold text-2xl px-2 mb-0">組織名</label>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <input id="soshikiNameInput" name="soshikiNameInput" type="text" class="form-control placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-lime-500 focus:border-transparent disabled:bg-gray-200 disabled:cursor-not-allowed"  style="width: 200px;" placeholder="組織名を入力" value="<?= h($this->request->getData('soshikiNameInput')) ?>">
+                            <input id="soshikiNameInput" name="soshikiNameInput" type="text" class="form-control placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-lime-500 focus:border-transparent disabled:bg-gray-200 disabled:cursor-not-allowed"  style="width: 200px;" placeholder="組織名を入力" value="<?= h($soshikiNameInput ?: $this->request->getData('soshikiNameInput')) ?>">
                             <button type="button" id="ajaxSoshikiBtn" class="bg-lime-200 hover:bg-lime-400 text-green-800 font-bold py-2 px-4 rounded focus:outline-none border-none disabled:bg-gray-200 disabled:hover:bg-gray-300">
                                 検索
                             </button>
@@ -45,16 +45,18 @@
                     <!-- 権限区分 -->
                     <div class="mt-4">
                         <div class="form-check inline-flex items-center">
-                            <input id="kengenCheck" name="kengenCheck" type="checkbox" class="form-checkbox h-6 w-6 text-indigo-600 transition duration-150 ease-in-out" <?= !empty($this->request->getData('kengenCheck')) ? 'checked' : '' ?>>
+                            <input id="kengenCheck" name="kengenCheck" type="checkbox" class="form-checkbox h-6 w-6 text-indigo-600 transition duration-150 ease-in-out" <?= (!empty($kengenCheck) && $kengenCheck === 'true') || !empty($this->request->getData('kengenCheck')) ? 'checked' : '' ?>>
                             <span class="text-gray-500 font-bold text-2xl px-2">権限区分</span>
                         </div>
                         <div class="mt-2">
                             <div class="inline-flex items-center mr-2">
-                                <input type="radio" class="" id="kengenKubun1" name="kengenKubun" value="1" <?= $this->request->getData('kengenKubun') == '1' ? 'checked' : '' ?>>
+                                <input type="radio" class="" id="kengenKubun1" name="kengenKubun" value="1" 
+                                <?= ($this->request->getData('kengenKubun') == '1' || $this->request->getQuery('kengenKubun') == '1') ? 'checked' : '' ?>>
                                 <label class="text-gray-500 text-2xl font-bold h-1 ml-2">全社</label>
                             </div>
                             <div class="inline-flex items-center">
-                                <input type="radio" class="" id="kengenKubun2" name="kengenKubun" value="2" <?= $this->request->getData('kengenKubun') == '2' ? 'checked' : '' ?>>
+                                <input type="radio" class="" id="kengenKubun2" name="kengenKubun" value="2" 
+                                <?= ($this->request->getData('kengenKubun') == '2' || $this->request->getQuery('kengenKubun') == '2') ? 'checked' : '' ?>>
                                 <label class="text-gray-500 text-2xl font-bold h-1 ml-2">自社</label>
                             </div>
                         </div>
@@ -69,6 +71,22 @@
                     追加する
                 </button>
             </div>
+            <!--checkbox hidden-->
+        <div class="w-1/4">
+            <?= $this->Form->text('hidden_companyCheck', ['value' => !empty($companyCheck) && $companyCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_companyCheck']) ?>
+            <?= $this->Form->text('hidden_soshikiCheck', ['value' => !empty($soshikiCheck) && $soshikiCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_soshikiCheck']) ?>
+            <?= $this->Form->text('hidden_kengenCheck', ['value' => !empty($kengenCheck) && $kengenCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_kengenCheck']) ?>
+
+            <!--input hidden-->
+            <?= $this->Form->text('hidden_companyNameInput', ['value' => $companyNameInput, 'id' => 'hidden_companyNameInput']) ?>
+            <?= $this->Form->text('hidden_soshikiNameInput', ['value' => $soshikiNameInput, 'id' => 'hidden_soshikiNameInput']) ?>
+
+            <!-- select hidden -->
+            <?= $this->Form->text('hidden_companyNameOutput', ['value' => $companyNameOutput, 'id' => 'hidden_companyNameOutput']) ?>
+
+            <!--radio hidden-->
+            <?= $this->Form->text('hidden_kengenKubun', ['value' => $kengenKubun, 'id' => 'hidden_kengenKubun']) ?>
+        </div>
         <?= $this->Form->end() ?>
     </div>
     <div class="overflow-x-auto mt-5">
@@ -119,6 +137,38 @@
     </div>
 </div>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 본 태그 selectbox에서 값을 취득을 못하는 상태. 
+    });
+    // 追加するページへ移動する
+    function goToCreate() {
+        // checkbox
+        var companyCheck = document.getElementById('companyCheck').checked ? 'true' : 'false';
+        var soshikiCheck = document.getElementById('soshikiCheck').checked ? 'true' : 'false';
+        var kengenCheck = document.getElementById('kengenCheck').checked ? 'true' : 'false';
+        // input 
+        var companyNameInput = document.getElementById('companyNameInput').value;
+        var soshikiNameInput = document.getElementById('soshikiNameInput').value;
+        // select
+        var companyNameOutput = document.getElementById('hidden_companyNameOutput').value;
+
+        //alert('companyNameOutput: ' + companyNameOutput);
+
+        // radio
+        var kengenKubun = document.querySelector('input[name="kengenKubun"]:checked').value;
+
+        var url = '/doctor-create?' +
+            'companyCheck=' + encodeURIComponent(companyCheck) +
+            '&soshikiCheck=' + encodeURIComponent(soshikiCheck) +
+            '&kengenCheck=' + encodeURIComponent(kengenCheck) +
+            '&companyNameInput=' + encodeURIComponent(companyNameInput) +
+            '&soshikiNameInput=' + encodeURIComponent(soshikiNameInput) +
+            '&companyNameOutput=' + encodeURIComponent(companyNameOutput) +
+            '&kengenKubun=' + encodeURIComponent(kengenKubun)
+
+            ;
+        window.location.href = url; 
+    }
     // Ajax Search Company
     $(document).ready(function() {
         var csrfToken = <?= json_encode($this->request->getAttribute('csrfToken')); ?>;
@@ -144,6 +194,12 @@
                     $select.append('<option value="">会社名の結果を確認!</option>');
                     $.each(response, function(index, company) {
                         $select.append('<option value="' + company.KAISYA_CODE + '">' + company.KAISYA_NAME_JPN + '</option>');
+                    });
+
+                    // 선택한 값이 hidden 필드에 반영되도록 이벤트 추가
+                    $select.change(function() {
+                        var selectedValue = $(this).val();
+                        $('#hidden_companyNameOutput').val(selectedValue);
                     });
                 },
                 error: function(xhr, status, error) {
@@ -184,10 +240,7 @@
             });
         });
     });
-    // Go to Create
-    function goToCreate() {
-        window.location.href = '/doctor-create';
-    }
+    
     //削除処理
     function deleteUser(button) {
         var userId = $(button).data('user-id');
