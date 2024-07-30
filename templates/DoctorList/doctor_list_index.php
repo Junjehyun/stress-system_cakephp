@@ -1,48 +1,52 @@
 <?php $this->assign('title', '産業医一覧'); ?>
-<div class="container max-w-7xl mx-auto py-8">
+<div class="container w-3/4 mx-auto py-8">
     <div class="bg-zinc-50 p-3 rounded shadow-xl gap-3">
         <?= $this->Form->create(null, ['url' => ['controller' => 'DoctorList', 'action' => 'hyojiSearch']]) ?>
-            <div class="flex flex-wrap justify-between items-center gap-3">
+            <div class="flex flex-wrap justify-center items-center gap-3">
                 <div class="mx-auto mt-3 w-3/5">
                     <!--会社名-->
                     <div class="flex items-center justify-start mb-3 space-x-4">
                         <div class="flex items-center space-x-2">
-                            <input type="checkbox" id="companyCheck" name="companyCheck" class="form-checkbox h-5 w-5 transition duration-150 ease-in-out" <?= !empty($this->request->getData('companyCheck')) ? 'checked' : '' ?>>
-                            <label class="text-gray-500 font-bold text-2xl px-2">会社名</label>
+                            <input type="checkbox" id="companyCheck" name="companyCheck" class="form-checkbox h-6 w-6 transition duration-150 ease-in-out" <?= !empty($this->request->getData('companyCheck')) ? 'checked' : '' ?> onchange="changeActiveCheckBox()">
+                            <label class="text-gray-500 font-bold text-2xl px-2 mb-0">会社名</label>
                         </div>
-                        <input id="companyNameInput" name="companyNameInput" type="text" class="form-control mx-2 placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-lime-500 focus:border-transparent w-1/3" placeholder="会社名を入力" value="<?= h($this->request->getData('companyNameInput')) ?>">
-                        <button type="button" id="ajaxSearchBtn" class="bg-lime-200 hover:bg-lime-400 text-green-800 font-bold mx-2 py-2 px-4 rounded focus:outline-none border-none">
-                            検索
-                        </button>
-                        <select id="companyNameOutput" name="companyNameOutput" class="form-select mx-2 w-full bg-white border border-gray-300 text-gray-700 py-2 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-2xl">
-                            <option value="">会社名を選択</option>
-                            <?php if (!empty($companyName)): ?>
-                                <option value="<?= h($companyName) ?>" selected><?= h($searchResultCompany->KAISYA_NAME_JPN) ?></option>
-                            <?php endif; ?>
-                        </select>
+                        <div class="flex items-center space-x-2">
+                            <input id="companyNameInput" name="companyNameInput" type="text" class="form-control placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-lime-500 focus:border-transparent disabled:bg-gray-200 disabled:cursor-not-allowed" style="width: 200px;" placeholder="会社名を入力" value="<?= h($this->request->getData('companyNameInput')) ?>">
+                            <button type="button" id="ajaxSearchBtn" class="bg-lime-200 hover:bg-lime-400 text-green-800 font-bold py-2 px-4 rounded focus:outline-none border-none disabled:bg-gray-200 disabled:hover:bg-gray-300" disabled>
+                                検索
+                            </button>
+                            <select id="companyNameOutput" name="companyNameOutput" class="form-select bg-white border border-gray-300 text-gray-700 py-2 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-2xl" style="width: 200px;" disabled>
+                                <option value="">会社名を選択</option>
+                                <?php if (!empty($companyName)): ?>
+                                    <option value="<?= h($companyName) ?>" selected><?= h($searchResultCompany->KAISYA_NAME_JPN) ?></option>
+                                <?php endif; ?>
+                            </select>
+                        </div>
                     </div>
                     <!--組織名-->
                     <div class="flex items-center justify-start mb-3 space-x-4">
                         <div class="flex items-center space-x-2">
-                            <input type="checkbox" id="soshikiCheck" name="soshikiCheck" class="form-checkbox h-5 w-5 transition duration-150 ease-in-out" <?= !empty($this->request->getData('soshikiCheck')) ? 'checked' : '' ?>>
-                            <label class="text-gray-500 font-bold text-2xl px-2">組織名</label>
+                            <input type="checkbox" id="soshikiCheck" name="soshikiCheck" class="form-checkbox h-6 w-6 transition duration-150 ease-in-out" <?= !empty($this->request->getData('soshikiCheck')) ? 'checked' : '' ?> onchange="changeActiveCheckBox()">
+                            <label class="text-gray-500 font-bold text-2xl px-2 mb-0">組織名</label>
                         </div>
-                        <input id="soshikiNameInput" name="soshikiNameInput" type="text" class="form-control mx-2 placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-lime-500 focus:border-transparent w-1/3 flex-grow" placeholder="組織名を入力" value="<?= h($this->request->getData('soshikiNameInput')) ?>">
-                        <button type="button" id="ajaxSoshikiBtn" class="bg-lime-200 hover:bg-lime-400 text-green-800 font-bold py-2 mx-2 px-4 rounded focus:outline-none border-none">
-                            検索
-                        </button>
-                        <select id="soshikiNameOutput" name="soshikiNameOutput" class="form-select mx-2 w-full bg-white border border-gray-300 text-gray-700 py-2 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-2xl">
-                            <option value="">組織名を選択</option>
-                            <?php if (!empty($soshikiName)): ?>
-                                <option value="<?= h($soshikiName) ?>" selected><?= h($searchResultSoshiki->SOSHIKI_NAME_JPN) ?></option>
-                            <?php endif; ?>
-                        </select>
+                        <div class="flex items-center space-x-2">
+                            <input id="soshikiNameInput" name="soshikiNameInput" type="text" class="form-control placeholder-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-lime-500 focus:border-transparent disabled:bg-gray-200 disabled:cursor-not-allowed"  style="width: 200px;" placeholder="組織名を入力" value="<?= h($this->request->getData('soshikiNameInput')) ?>">
+                            <button type="button" id="ajaxSoshikiBtn" class="bg-lime-200 hover:bg-lime-400 text-green-800 font-bold py-2 px-4 rounded focus:outline-none border-none disabled:bg-gray-200 disabled:hover:bg-gray-300">
+                                検索
+                            </button>
+                            <select id="soshikiNameOutput" name="soshikiNameOutput" class="form-select bg-white border border-gray-300 text-gray-700 py-2 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-2xl" style="width: 200px;">
+                                <option value="">組織名を選択</option>
+                                <?php if (!empty($soshikiName)): ?>
+                                    <option value="<?= h($soshikiName) ?>" selected><?= h($searchResultSoshiki->SOSHIKI_NAME_JPN) ?></option>
+                                <?php endif; ?>
+                            </select>
+                        </div>
                     </div>
                     <!-- 権限区分 -->
                     <div class="mt-4">
                         <div class="form-check inline-flex items-center">
-                            <input id="kengenCheck" name="kengenCheck" type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out" <?= !empty($this->request->getData('kengenCheck')) ? 'checked' : '' ?>>
-                            <span class="text-gray-500 font-bold px-2">権限区分</span>
+                            <input id="kengenCheck" name="kengenCheck" type="checkbox" class="form-checkbox h-6 w-6 text-indigo-600 transition duration-150 ease-in-out" <?= !empty($this->request->getData('kengenCheck')) ? 'checked' : '' ?>>
+                            <span class="text-gray-500 font-bold text-2xl px-2">権限区分</span>
                         </div>
                         <div class="mt-2">
                             <div class="inline-flex items-center mr-2">
@@ -111,7 +115,6 @@
                 <?= $this->Paginator->next(__('次') . ' >') ?>
                 <?= $this->Paginator->last(__('最後') . ' >>') ?>
             </ul>
-            <!-- <p><?= $this->Paginator->counter(__('ページ {page} / {pages}, 全 {count} 件')) ?></p> -->
         </div>
     </div>
 </div>
@@ -217,4 +220,46 @@
             });
         }
     }
+    //KengenKubunの有効無効切り替え
+    function toggleKengenKubun() {
+
+        const kengenCheck = document.getElementById('kengenCheck');
+        const kengenKubunInputs = document.querySelectorAll('input[name="kengenKubun"]');
+
+        kengenKubunInputs.forEach(input => {
+            input.disabled = !kengenCheck.checked;
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const kengenCheck = document.getElementById('kengenCheck');
+        kengenCheck.addEventListener('change', toggleKengenKubun);
+
+        toggleKengenKubun();
+    });
+
+    // チェックボックスの有効無効切り替え
+    function changeActiveCheckBox() {
+        var companyCheck = document.getElementById('companyCheck').checked;
+        var soshikiCheck = document.getElementById('soshikiCheck').checked;
+
+        var companyNameInput = document.getElementById('companyNameInput');
+        var searchKaisyaBtn = document.getElementById('ajaxSearchBtn');
+        var companyNameOutput = document.getElementById('companyNameOutput');
+
+        var soshikiNameInput = document.getElementById('soshikiNameInput');
+        var searchSoshikiBtn = document.getElementById('ajaxSoshikiBtn');
+        var soshikiNameOutput = document.getElementById('soshikiNameOutput');
+
+        companyNameInput.disabled = !companyCheck;
+        searchKaisyaBtn.disabled = !companyCheck;
+        companyNameOutput.disabled = !companyCheck;
+
+        soshikiNameInput.disabled = !soshikiCheck;
+        searchSoshikiBtn.disabled = !soshikiCheck;
+        soshikiNameOutput.disabled = !soshikiCheck;
+
+    }
+
+    changeActiveCheckBox();
 </script>

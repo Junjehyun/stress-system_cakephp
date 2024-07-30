@@ -3,18 +3,18 @@
 <h1 class="text-center text-5xl font-bold mt-5">新規産業医編集</h1>
     <?= $this->Form->create($userUpdating, ['url' => ['action' => 'doctorEdit', $userUpdating->USER_ID], 'type' => 'post']) ?>
         <div class="bg-zinc-50 p-3 rounded shadow-md gap-3 max-w-[70%] mx-auto mt-10">
-            <div class="flex flex-wrap justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
                 <div class="mx-auto mt-3">
                     <div class="flex items-center mb-3 space-x-6">
                         <div class="inline-grid items-center">
                             <label class="text-gray-500 text-2xl font-bold mb-2">社員ID</label>
                             <?= $this->Form->text('USER_ID', [
-                                'class' => 'form-input disabled:bg-gray-200 cursor-not-allowed',
+                                'class' => 'form-input disabled:bg-gray-200 cursor-not-allowed mx-1',
                                 'disabled' => true,    
                             ]) ?>
                         </div>
                         <div class="inline-grid items-center">
-                            <label class="text-gray-500 text-2xl font-bold mb-2">氏名</label>
+                            <label class="text-gray-500 text-2xl font-bold mb-2 mx-1">氏名</label>
                             <?= $this->Form->text('NAME', [
                                 'class' => 'form-input',    
                             ]) ?>
@@ -24,13 +24,13 @@
                         <div class="inline-grid items-center">
                             <label class="text-gray-500 text-2xl font-bold mb-2">会社名</label>
                             <?= $this->Form->select('KAISYA_CODE', $kaisyaList, [
-                                'class' => 'form-select',
+                                'class' => 'form-select w-96',
                             ]) ?>
                         </div>
                         <div class="inline-grid items-center">
                             <label class="text-gray-500 text-2xl font-bold mb-2">組織名</label>
                             <?= $this->Form->select('SOSHIKI_CODE', $soshikiList, [
-                                'class' => 'form-select',
+                                'class' => 'form-select w-96',
                             ]) ?>
                         </div>
                     </div>
@@ -45,19 +45,19 @@
                             <span class="text-gray-500 text-2xl font-bold mt-3 ml-1">権限区分</span>
                         </div>
                     </div>
-                    <div class="flex items-center justify-start mb-3">
+                    <div class="inline-flex items-center mb-3">
                         <?= $this->Form->radio('KENGEN_KUBUN', [
                             [
                                 'value' => '1',
-                                'text' => '全社',
+                                'text' => ' 全社',
                                 'id' => 'kengenKubun1',
-                                'class' => 'form-radio mb-7 text-gray-500 text-base font-bold mr-4'
+                                'class' => 'form-radio mb-7 text-gray-500 text-base font-bold w-5 h-5'
                             ],
                             [
                                 'value' => '2',
-                                'text' => '自社',
+                                'text' => ' 自社',
                                 'id' => 'kengenKubun2',
-                                'class' => 'form-radio mb-7 text-gray-500 text-base font-bold'
+                                'class' => 'form-radio mb-7 text-gray-500 text-base font-bold w-5 h-5 ml-3'
                             ]
                         ]); ?>
                     </div>
