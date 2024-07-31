@@ -34,6 +34,15 @@ class DoctorEditController extends AppController
      */
     public function doctorEdit($USER_ID) {
 
+        $companyCheck = $this->request->getQuery('companyCheck', 'false');
+        $soshikiCheck = $this->request->getQuery('soshikiCheck', 'false');
+        $kengenCheck = $this->request->getQuery('kengenCheck', 'false');
+        $companyNameInput = $this->request->getQuery('companyNameInput');
+        $soshikiNameInput = $this->request->getQuery('soshikiNameInput');
+        $companyNameOutput = $this->request->getQuery('companyNameOutput');
+        $soshikiNameOutput = $this->request->getQuery('soshikiNameOutput');
+        $kengenKubun = $this->request->getQuery('kengenKubun');
+
         $userTable = TableRegistry::getTableLocator()->get('Users');
         $kaisyaTable = TableRegistry::getTableLocator()->get('KaisyaMst');
         $soshikiTable = TableRegistry::getTableLocator()->get('TaisyoSoshiki');
@@ -41,8 +50,7 @@ class DoctorEditController extends AppController
         $userUpdating = $userTable->find()
         ->where(['Users.USER_ID' => $USER_ID])
         ->contain(['KaisyaMst', 'TaisyoSoshiki'])
-        ->firstOrFail();
-
+        ->first();
         
         // 会社リストを取得 
         $kaisyaList = $kaisyaTable->find('list', [
@@ -60,18 +68,28 @@ class DoctorEditController extends AppController
 
         //Update処理
         if ($this->request->is('post')) {
-            
             $userTable->patchEntity($userUpdating, $this->request->getData());
-            
-            if ($userTable->save($userUpdating)) {
+    
+            $errors = $userUpdating->getErrors();
+            if (empty($this->request->getData('KENGEN_CHECK'))) {
+                $errors['KENGEN_CHECK'][] = 'チェックしてください。';
+            }
+    
+            if (empty($errors) && $userTable->save($userUpdating)) {
                 $this->Flash->success(__('更新しました。'));
-                return $this->redirect(['controller' => 'DoctorList','action' => 'doctorListIndex']);
+                return $this->redirect(['controller' => 'DoctorList',
+                'action' => 'doctorListIndex'
+            ]);
             }
 
-            $this->Flash->error(__('エラーが発生しました。もう一度お試しください。'));
-        }   
-
-        $this->set(compact('userUpdating', 'kaisyaList', 'soshikiList'));
+            $this->set(compact('userUpdating', 'errors'));
+    
+        }
+    
+        $this->set(compact('userUpdating', 'kaisyaList', 'soshikiList', 
+            'companyCheck', 'soshikiCheck', 'kengenCheck', 'companyNameInput',
+            'soshikiNameInput', 'companyNameOutput', 'soshikiNameOutput', 'kengenKubun'
+        ));
     }
 
     /**

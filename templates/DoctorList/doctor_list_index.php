@@ -76,14 +76,12 @@
             <?= $this->Form->text('hidden_companyCheck', ['value' => !empty($companyCheck) && $companyCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_companyCheck']) ?>
             <?= $this->Form->text('hidden_soshikiCheck', ['value' => !empty($soshikiCheck) && $soshikiCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_soshikiCheck']) ?>
             <?= $this->Form->text('hidden_kengenCheck', ['value' => !empty($kengenCheck) && $kengenCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_kengenCheck']) ?>
-
             <!--input hidden-->
             <?= $this->Form->text('hidden_companyNameInput', ['value' => $companyNameInput, 'id' => 'hidden_companyNameInput']) ?>
             <?= $this->Form->text('hidden_soshikiNameInput', ['value' => $soshikiNameInput, 'id' => 'hidden_soshikiNameInput']) ?>
-
             <!-- select hidden -->
             <?= $this->Form->text('hidden_companyNameOutput', ['value' => $companyNameOutput, 'id' => 'hidden_companyNameOutput']) ?>
-
+            <?= $this->Form->text('hidden_soshikiNameOutput', ['value' => $soshikiNameOutput, 'id' => 'hidden_soshikiNameOutput']) ?>
             <!--radio hidden-->
             <?= $this->Form->text('hidden_kengenKubun', ['value' => $kengenKubun, 'id' => 'hidden_kengenKubun']) ?>
         </div>
@@ -112,11 +110,14 @@
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center"><?= h($user->taisyo_soshiki->SOSHIKI_NAME_JPN) ?></td>
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center"><?= h($user->KENGEN_KUBUN == 1? '全社' : '自社') ?></td>
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center">
-                    <a href="<?= $this->Url->build(['controller' => 'DoctorEdit', 'action' => 'doctorEdit', $user->USER_ID]) ?>">
-                        <button type="button" class="bg-cyan-300 hover:bg-cyan-400 py-2 px-4 rounded border-none">
-                            変更
+                        <a href="<?= $this->Url->build(['controller' => 'DoctorEdit', 'action' => 'doctorEdit', $user->USER_ID]) ?>">
+                            <button type="button" class="bg-cyan-300 hover:bg-cyan-400 py-2 px-4 rounded border-none">
+                                変更
+                            </button>
+                        </a>
+                        <button type="button" class="bg-blue-700 hover:bg-cyan-400 py-2 px-4 text-white rounded border-none" onclick="goToUpdate(this)" data-userid="<?= h($user->USER_ID) ?>">
+                            テスト変更
                         </button>
-                    </a>
                         <button type="button" class="bg-pink-300 hover:bg-pink-400 py-2 px-4 rounded border-none" data-user-id="<?= h($user->USER_ID) ?>" onclick="deleteUser(this)">
                             削除
                         </button>
@@ -137,9 +138,27 @@
     </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 본 태그 selectbox에서 값을 취득을 못하는 상태. 
+    document.addEventListener("DOMContentLoaded", function() {
+        var hiddenCompanyNameOutput = document.getElementById('hidden_companyNameOutput').value;
+        var hiddenSoshikiNameOutput = document.getElementById('hidden_soshikiNameOutput').value;
+
+        if (hiddenCompanyNameOutput) {
+            var companyNameOutputSelect = document.getElementById('companyNameOutput');
+            var newOption = new Option(hiddenCompanyNameOutput, hiddenCompanyNameOutput, true, true);
+            companyNameOutputSelect.add(newOption);
+        }
+
+        if (hiddenSoshikiNameOutput) {
+            var soshikiNameOutputSelect = document.getElementById('soshikiNameOutput');
+            var newOption = new Option(hiddenSoshikiNameOutput, hiddenSoshikiNameOutput, true, true);
+            soshikiNameOutputSelect.add(newOption);
+        }
+
+        changeActiveCheckBox();
+        toggleKengenKubun();
     });
+
+
     // 追加するページへ移動する
     function goToCreate() {
         // checkbox
@@ -151,11 +170,13 @@
         var soshikiNameInput = document.getElementById('soshikiNameInput').value;
         // select
         var companyNameOutput = document.getElementById('hidden_companyNameOutput').value;
-
-        //alert('companyNameOutput: ' + companyNameOutput);
-
+        var soshikiNameOutput = document.getElementById('hidden_soshikiNameOutput').value;
         // radio
-        var kengenKubun = document.querySelector('input[name="kengenKubun"]:checked').value;
+        //var kengenKubun = document.querySelector('input[name="kengenKubun"]:checked').value;
+        var kengenKubun1 = $('input[name="kengenKubun"][value="1"]').is(':checked') ? '1' : '';
+        var kengenKubun2 = $('input[name="kengenKubun"][value="2"]').is(':checked') ? '2' : '';
+        var kengenKubun = kengenKubun1 || kengenKubun2;
+        
 
         var url = '/doctor-create?' +
             'companyCheck=' + encodeURIComponent(companyCheck) +
@@ -164,11 +185,48 @@
             '&companyNameInput=' + encodeURIComponent(companyNameInput) +
             '&soshikiNameInput=' + encodeURIComponent(soshikiNameInput) +
             '&companyNameOutput=' + encodeURIComponent(companyNameOutput) +
+            '&soshikiNameOutput=' + encodeURIComponent(soshikiNameOutput) +
             '&kengenKubun=' + encodeURIComponent(kengenKubun)
-
             ;
         window.location.href = url; 
     }
+
+    function goToUpdate(button) {
+        var userId = button.getAttribute('data-userid');
+        console.log("User ID: ", userId); // 디버깅을 위해 추가
+
+        // checkbox
+        var companyCheck = document.getElementById('companyCheck').checked ? 'true' : 'false';
+        var soshikiCheck = document.getElementById('soshikiCheck').checked ? 'true' : 'false';
+        var kengenCheck = document.getElementById('kengenCheck').checked ? 'true' : 'false';
+        
+        // input 
+        var companyNameInput = document.getElementById('companyNameInput').value;
+        var soshikiNameInput = document.getElementById('soshikiNameInput').value;
+        
+        // select
+        var companyNameOutput = document.getElementById('hidden_companyNameOutput').value;
+        var soshikiNameOutput = document.getElementById('hidden_soshikiNameOutput').value;
+        
+        // radio
+        var kengenKubun1 = $('input[name="kengenKubun"][value="1"]').is(':checked') ? '1' : '';
+        var kengenKubun2 = $('input[name="kengenKubun"][value="2"]').is(':checked') ? '2' : '';
+        var kengenKubun = kengenKubun1 || kengenKubun2;
+
+        var url = '/doctor-edit:' + encodeURIComponent(userId) + '?' +
+            'companyCheck=' + encodeURIComponent(companyCheck) +
+            '&soshikiCheck=' + encodeURIComponent(soshikiCheck) +
+            '&kengenCheck=' + encodeURIComponent(kengenCheck) +
+            '&companyNameInput=' + encodeURIComponent(companyNameInput) +
+            '&soshikiNameInput=' + encodeURIComponent(soshikiNameInput) +
+            '&companyNameOutput=' + encodeURIComponent(companyNameOutput) +
+            '&soshikiNameOutput=' + encodeURIComponent(soshikiNameOutput) +
+            '&kengenKubun=' + encodeURIComponent(kengenKubun);
+
+        console.log("Generated URL: ", url); // 디버깅을 위해 추가
+        window.location.href = url;
+    }
+
     // Ajax Search Company
     $(document).ready(function() {
         var csrfToken = <?= json_encode($this->request->getAttribute('csrfToken')); ?>;
@@ -195,11 +253,9 @@
                     $.each(response, function(index, company) {
                         $select.append('<option value="' + company.KAISYA_CODE + '">' + company.KAISYA_NAME_JPN + '</option>');
                     });
-
-                    // 선택한 값이 hidden 필드에 반영되도록 이벤트 추가
                     $select.change(function() {
-                        var selectedValue = $(this).val();
-                        $('#hidden_companyNameOutput').val(selectedValue);
+                        var selectedText = $('#companyNameOutput option:selected').text();
+                        $('#hidden_companyNameOutput').val(selectedText);
                     });
                 },
                 error: function(xhr, status, error) {
@@ -232,6 +288,10 @@
                     $select.append('<option value="">組織名の結果を確認!</option>');
                     $.each(response, function(index, soshiki) {
                         $select.append('<option value="' + soshiki.SOSHIKI_CODE + '">' + soshiki.SOSHIKI_NAME_JPN + '</option>');
+                    });
+                    $select.change(function() {
+                        var selectedText = $('#soshikiNameOutput option:selected').text();
+                        $('#hidden_soshikiNameOutput').val(selectedText);
                     });
                 },
                 error: function(xhr, status, error) {

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use ArrayObject;
+use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -71,7 +73,7 @@ class UsersTable extends Table
     {
         $validator
             ->scalar('NAME')
-            ->maxLength('NAME', 10)
+            ->maxLength('NAME', 10, '氏名は10文字以内で入力してください。')
             ->requirePresence('NAME', 'create')
             ->notEmptyString('NAME', '氏名は必須です。');
 
@@ -83,24 +85,26 @@ class UsersTable extends Table
 
         $validator
             ->scalar('USER_ID')
-            ->maxLength('USER_ID', 14)
+            ->maxLength('USER_ID', 10 , '社員IDは10文字以内で入力してください。')
             ->requirePresence('USER_ID', 'create')
-            ->notEmptyString('USER_ID');
+            ->notEmptyString('USER_ID', '社員IDは必須です。');
 
         $validator
             ->scalar('KAISYA_CODE')
             ->maxLength('KAISYA_CODE', 6)
             ->requirePresence('KAISYA_CODE', 'create')
-            ->notEmptyString('KAISYA_CODE');
+            ->notEmptyString('KAISYA_CODE', '会社名は必須です。');
 
         $validator
             ->scalar('SOSHIKI_CODE')
             ->maxLength('SOSHIKI_CODE', 69)
             ->requirePresence('SOSHIKI_CODE', 'create')
-            ->notEmptyString('SOSHIKI_CODE');
+            ->notEmptyString('SOSHIKI_CODE', '組織名は必須です。');
 
         $validator
-            ->allowEmptyString('KENGEN_KUBUN');
+            ->scalar('KENGEN_KUBUN')
+            ->requirePresence('KENGEN_KUBUN', 'create', '全社または自社を選択してください。')
+            ->notEmptyString('権限区分チェックをして下さい。');
 
         $validator
             ->scalar('password')

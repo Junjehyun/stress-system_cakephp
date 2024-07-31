@@ -31,16 +31,13 @@ class DoctorCreateController extends AppController
      */
     public function doctorCreateIndex() {
 
-        // URL 파라미터로부터 값 받아오기
         $companyCheck = $this->request->getQuery('companyCheck', 'false');
         $soshikiCheck = $this->request->getQuery('soshikiCheck', 'false');
         $kengenCheck = $this->request->getQuery('kengenCheck', 'false');
-
         $companyNameInput = $this->request->getQuery('companyNameInput');
         $soshikiNameInput = $this->request->getQuery('soshikiNameInput');
-
         $companyNameOutput = $this->request->getQuery('companyNameOutput');
-
+        $soshikiNameOutput = $this->request->getQuery('soshikiNameOutput');
         $kengenKubun = $this->request->getQuery('kengenKubun');
 
         $companyName = $this->KaisyaMst->find('list', [
@@ -56,27 +53,55 @@ class DoctorCreateController extends AppController
         $this->set(compact(
             'companyName', 'soshikiName', 
             'companyCheck', 'soshikiCheck', 'kengenCheck',
-            'companyNameInput', 'soshikiNameInput', 'kengenKubun'
+            'companyNameInput', 'soshikiNameInput', 
+            'companyNameOutput', 'soshikiNameOutput','kengenKubun'
         ));
 
     }
 
     public function createDoctor() {
 
+         //HIDDENタグから値を取得 
+        $companyCheck = $this->request->getQuery('companyCheck', 'false');
+        $soshikiCheck = $this->request->getQuery('soshikiCheck', 'false');
+        $kengenCheck = $this->request->getQuery('kengenCheck', 'false');
+        $companyNameInput = $this->request->getQuery('companyNameInput');
+        $soshikiNameInput = $this->request->getQuery('soshikiNameInput');
+        $companyNameOutput = $this->request->getQuery('companyNameOutput');
+        $kengenKubun = $this->request->getQuery('kengenKubun');
+
         //リクエストがPOSTかどうか確認
         if ($this->request->is('post')) {
-            //新たな産業医を生成する
             $doctor = $this->Users->newEmptyEntity();
-            //フォームデータをUsersエンティティにパッチする
             $doctor = $this->Users->patchEntity($doctor, $this->request->getData());
-            //産業医をデータベースに保存する
-            if ($this->Users->save($doctor)) {
-                //成功メッセージを表示, doctor-listページにリダイレクト
+
+            $errors = $doctor->getErrors();
+            if (empty($this->request->getData('kengenCheck'))) {
+                $errors['KENGEN_CHECK'][] = '権限区分のチェックボックスをチェックしてください。';
+            }
+
+            if (empty($errors) && $this->Users->save($doctor)) {
                 $this->Flash->success(__('産業医登録が完了しました'));
                 return $this->redirect(['controller' => 'DoctorList','action' => 'doctorListIndex']);
             }
-            //エラーメッセージを表示
-            $this->Flash->error(__('エラーが発生しました'));
+            
+            $this->set(compact('doctor', 'errors'));
+
+            $companyName = $this->KaisyaMst->find('list', [
+                'keyField' => 'KAISYA_CODE',
+                'valueField' => 'KAISYA_NAME_JPN'
+            ])->toArray();
+
+            $soshikiName = $this->TaisyoSoshiki->find('list', [
+                'keyField' => 'SOSHIKI_CODE',
+                'valueField' => 'SOSHIKI_NAME_JPN'
+            ])->toArray();
+
+            $this->set(compact('companyName', 'soshikiName',
+                'companyCheck', 'soshikiCheck', 'kengenCheck',
+                'companyNameInput', 'soshikiNameInput', 'kengenKubun'
+            ));
+            return $this->render('doctor_create_index'); 
         }
         return $this->redirect(['action' => 'doctorCreateIndex']);
     }
