@@ -83,9 +83,7 @@ class DoctorEditController extends AppController
             }
 
             $this->set(compact('userUpdating', 'errors'));
-    
         }
-    
         $this->set(compact('userUpdating', 'kaisyaList', 'soshikiList', 
             'companyCheck', 'soshikiCheck', 'kengenCheck', 'companyNameInput',
             'soshikiNameInput', 'companyNameOutput', 'soshikiNameOutput', 'kengenKubun'

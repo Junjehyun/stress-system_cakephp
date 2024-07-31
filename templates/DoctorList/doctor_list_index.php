@@ -73,17 +73,17 @@
             </div>
             <!--checkbox hidden-->
         <div class="w-1/4">
-            <?= $this->Form->text('hidden_companyCheck', ['value' => !empty($companyCheck) && $companyCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_companyCheck']) ?>
-            <?= $this->Form->text('hidden_soshikiCheck', ['value' => !empty($soshikiCheck) && $soshikiCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_soshikiCheck']) ?>
-            <?= $this->Form->text('hidden_kengenCheck', ['value' => !empty($kengenCheck) && $kengenCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_kengenCheck']) ?>
+            <?= $this->Form->hidden('hidden_companyCheck', ['value' => !empty($companyCheck) && $companyCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_companyCheck']) ?>
+            <?= $this->Form->hidden('hidden_soshikiCheck', ['value' => !empty($soshikiCheck) && $soshikiCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_soshikiCheck']) ?>
+            <?= $this->Form->hidden('hidden_kengenCheck', ['value' => !empty($kengenCheck) && $kengenCheck === 'true' ? 'true' : 'false', 'id' => 'hidden_kengenCheck']) ?>
             <!--input hidden-->
-            <?= $this->Form->text('hidden_companyNameInput', ['value' => $companyNameInput, 'id' => 'hidden_companyNameInput']) ?>
-            <?= $this->Form->text('hidden_soshikiNameInput', ['value' => $soshikiNameInput, 'id' => 'hidden_soshikiNameInput']) ?>
+            <?= $this->Form->hidden('hidden_companyNameInput', ['value' => $companyNameInput, 'id' => 'hidden_companyNameInput']) ?>
+            <?= $this->Form->hidden('hidden_soshikiNameInput', ['value' => $soshikiNameInput, 'id' => 'hidden_soshikiNameInput']) ?>
             <!-- select hidden -->
-            <?= $this->Form->text('hidden_companyNameOutput', ['value' => $companyNameOutput, 'id' => 'hidden_companyNameOutput']) ?>
-            <?= $this->Form->text('hidden_soshikiNameOutput', ['value' => $soshikiNameOutput, 'id' => 'hidden_soshikiNameOutput']) ?>
+            <?= $this->Form->hidden('hidden_companyNameOutput', ['value' => $companyNameOutput, 'id' => 'hidden_companyNameOutput']) ?>
+            <?= $this->Form->hidden('hidden_soshikiNameOutput', ['value' => $soshikiNameOutput, 'id' => 'hidden_soshikiNameOutput']) ?>
             <!--radio hidden-->
-            <?= $this->Form->text('hidden_kengenKubun', ['value' => $kengenKubun, 'id' => 'hidden_kengenKubun']) ?>
+            <?= $this->Form->hidden('hidden_kengenKubun', ['value' => $kengenKubun, 'id' => 'hidden_kengenKubun']) ?>
         </div>
         <?= $this->Form->end() ?>
     </div>
@@ -110,13 +110,13 @@
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center"><?= h($user->taisyo_soshiki->SOSHIKI_NAME_JPN) ?></td>
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center"><?= h($user->KENGEN_KUBUN == 1? '全社' : '自社') ?></td>
                     <td class="border-r border-zinc-300 font-bold text-gray-500 text-center">
-                        <a href="<?= $this->Url->build(['controller' => 'DoctorEdit', 'action' => 'doctorEdit', $user->USER_ID]) ?>">
+                        <!-- <a href="<?= $this->Url->build(['controller' => 'DoctorEdit', 'action' => 'doctorEdit', $user->USER_ID]) ?>">
                             <button type="button" class="bg-cyan-300 hover:bg-cyan-400 py-2 px-4 rounded border-none">
                                 変更
                             </button>
-                        </a>
-                        <button type="button" class="bg-blue-700 hover:bg-cyan-400 py-2 px-4 text-white rounded border-none" onclick="goToUpdate(this)" data-userid="<?= h($user->USER_ID) ?>">
-                            テスト変更
+                        </a> -->
+                        <button type="button" class="bg-cyan-300 hover:bg-cyan-400 py-2 px-4 text-white rounded border-none" onclick="goToUpdate(this)" data-userid="<?= h($user->USER_ID) ?>">
+                            変更
                         </button>
                         <button type="button" class="bg-pink-300 hover:bg-pink-400 py-2 px-4 rounded border-none" data-user-id="<?= h($user->USER_ID) ?>" onclick="deleteUser(this)">
                             削除
@@ -213,7 +213,7 @@
         var kengenKubun2 = $('input[name="kengenKubun"][value="2"]').is(':checked') ? '2' : '';
         var kengenKubun = kengenKubun1 || kengenKubun2;
 
-        var url = '/doctor-edit:' + encodeURIComponent(userId) + '?' +
+        var url = '/doctor-edit/' + encodeURIComponent(userId) + '?' +
             'companyCheck=' + encodeURIComponent(companyCheck) +
             '&soshikiCheck=' + encodeURIComponent(soshikiCheck) +
             '&kengenCheck=' + encodeURIComponent(kengenCheck) +

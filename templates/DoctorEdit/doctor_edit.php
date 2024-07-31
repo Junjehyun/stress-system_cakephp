@@ -94,19 +94,41 @@
             </div>
         </div>
         <!--会社名のhidden-->
-        <?= $this->Form->text('hidden_companyCheck', ['value' => $companyCheck]) ?>
-        <?= $this->Form->text('hidden_soshikiCheck', ['value' => $soshikiCheck]) ?>
-        <?= $this->Form->text('hidden_kengenCheck', ['value' => $kengenCheck]) ?>
-        <?= $this->Form->text('hidden_companyNameInput', ['value' => $companyNameInput]) ?>
-        <?= $this->Form->text('hidden_soshikiNameInput', ['value' => $soshikiNameInput]) ?>
-        <?= $this->Form->text('hidden_companyNameOutput', ['value' => $this->request->getQuery('companyNameOutput')]) ?>
-        <?= $this->Form->text('hidden_soshikiNameOutput', ['value' => $this->request->getQuery('soshikiNameOutput')]) ?>
-        <?= $this->Form->text('hidden_kengenKubun', ['value' => $kengenKubun]) ?>
+        <?= $this->Form->hidden('hidden_companyCheck', ['value' => $companyCheck]) ?>
+        <?= $this->Form->hidden('hidden_soshikiCheck', ['value' => $soshikiCheck]) ?>
+        <?= $this->Form->hidden('hidden_kengenCheck', ['value' => $kengenCheck]) ?>
+        <?= $this->Form->hidden('hidden_companyNameInput', ['value' => $companyNameInput]) ?>
+        <?= $this->Form->hidden('hidden_soshikiNameInput', ['value' => $soshikiNameInput]) ?>
+        <?= $this->Form->hidden('hidden_companyNameOutput', ['value' => $this->request->getQuery('companyNameOutput')]) ?>
+        <?= $this->Form->hidden('hidden_soshikiNameOutput', ['value' => $this->request->getQuery('soshikiNameOutput')]) ?>
+        <?= $this->Form->hidden('hidden_kengenKubun', ['value' => $kengenKubun]) ?>
     <?= $this->Form->end() ?>
 </div>
 <script>
     // 戻るボタン
     function backToListBtn() {
-        location.href = '/doctor-list';
+
+        var companyCheck = document.querySelector('[name="hidden_companyCheck"]').value;
+        var soshikiCheck = document.querySelector('[name="hidden_soshikiCheck"]').value;
+        var kengenCheck = document.querySelector('[name="hidden_kengenCheck"]').value;
+        var companyNameInput = document.querySelector('[name="hidden_companyNameInput"]').value;
+        var soshikiNameInput = document.querySelector('[name="hidden_soshikiNameInput"]').value;
+        var kengenKubun = document.querySelector('[name="hidden_kengenKubun"]').value;
+
+        var companyNameOutput = document.querySelector('[name="hidden_companyNameOutput"]').value;
+        var soshikiNameOutput = document.querySelector('[name="hidden_soshikiNameOutput"]').value;
+
+        var url = '/doctor-list?' +
+            'companyCheck=' + encodeURIComponent(companyCheck) +
+            '&soshikiCheck=' + encodeURIComponent(soshikiCheck) +
+            '&kengenCheck=' + encodeURIComponent(kengenCheck) +
+            '&companyNameInput=' + encodeURIComponent(companyNameInput) +
+            '&soshikiNameInput=' + encodeURIComponent(soshikiNameInput) +
+            '&companyNameOutput=' + encodeURIComponent(companyNameOutput) +
+            '&soshikiNameOutput=' + encodeURIComponent(soshikiNameOutput) +
+            '&kengenKubun=' + encodeURIComponent(kengenKubun)
+            ;
+            //alert(companyNameOutput);
+        window.location.href = url;
     }
 </script>

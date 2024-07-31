@@ -121,9 +121,6 @@
             '&soshikiNameOutput=' + encodeURIComponent(soshikiNameOutput) +
             '&kengenKubun=' + encodeURIComponent(kengenKubun)
             ;
-
-            //alert(companyNameOutput);
-
         window.location.href = url;
 
     }

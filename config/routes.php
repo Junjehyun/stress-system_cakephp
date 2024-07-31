@@ -133,7 +133,8 @@ return function (RouteBuilder $routes): void {
          * DoctorEditController
          * 
          */
-        $builder->connect('/doctor-edit:USER_ID',
+        //$builder->connect('/doctor-edit:USER_ID',
+        $builder->connect('/doctor-edit/{USER_ID}',
         [
             'controller' => 'DoctorEdit',
             'action' => 'doctorEdit'
