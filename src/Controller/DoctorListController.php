@@ -159,6 +159,10 @@ class DoctorListController extends AppController
             $companyNameInput = $this->request->getData('companyNameInput');
             $soshikiNameInput = $this->request->getData('soshikiNameInput');
 
+            // $companyNameOutput, $soshikiNameOutput
+            $companyNameOutput = $this->request->getQuery('companyNameOutput');
+            $soshikiNameOutput = $this->request->getQuery('soshikiNameOutput');
+
             //クエリ条件配列初期化
             $conditions = [];
 
@@ -209,7 +213,9 @@ class DoctorListController extends AppController
                 'searchResultSoshiki', 
                 'kengenKubun',
                 'companyNameInput',
-                'soshikiNameInput'
+                'soshikiNameInput',
+                'companyNameOutput',
+                'soshikiNameOutput'
             ));
             $this->render('doctor_list_index');
         }

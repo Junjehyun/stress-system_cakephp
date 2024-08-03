@@ -193,7 +193,6 @@
 
     function goToUpdate(button) {
         var userId = button.getAttribute('data-userid');
-        console.log("User ID: ", userId); // 디버깅을 위해 추가
 
         // checkbox
         var companyCheck = document.getElementById('companyCheck').checked ? 'true' : 'false';
